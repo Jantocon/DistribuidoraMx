@@ -1,9 +1,21 @@
-# Distribuidoramxweb
+# DistribuidoraMX Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.9.
+Aplicación web desarrollada con Angular para administrar productos, proveedores y tipos de producto mediante integración con API REST.
 
-## Development server
+## Tecnologías
 
+- Angular 19
+- TypeScript
+- Bootstrap
+- RxJS
+- Angular Router
+
+## Ejecutar proyecto
+
+Instalar dependencias:
+
+```bash
+npm install
 To start a local development server, run:
 
 ```bash
