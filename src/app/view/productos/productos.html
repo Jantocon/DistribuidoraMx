@@ -1,0 +1,116 @@
+<div class="container">
+  @if(!modoAgregar){
+    <h1>Listado/Busqueda de productos</h1>
+    <div class="search-container">
+      <input
+        [(ngModel)]="claveBusqueda"
+        placeholder="Clave">
+      <select [(ngModel)]="tipoProductoSeleccionado">
+        <option [ngValue]="null" disabled>Seleccione tipo</option>
+        @for(tipo of tipoProductos; track tipo.id){
+          <option [ngValue]="tipo.id">
+            {{ tipo.tipo }}
+          </option>
+        }
+      </select>
+      <button (click)="buscar()">Buscar</button>
+    </div>
+  } @else if(productoAgregando) {
+    <h1>Agregar productos/proveedor</h1>
+    <div class="add-container">
+      <label>clave producto</label>
+      <input placeholder="Clave" [(ngModel)]="productoAgregando.clave">
+      <label>nombre producto</label>
+      <input placeholder="Nombre" [(ngModel)]="productoAgregando.nombre">
+      <label>precio producto</label>
+      <input type="number" placeholder="Precio" [(ngModel)]="productoAgregando.precio">
+      <label>tipo producto</label>
+      <select [(ngModel)]="productoAgregando.tipoProductoId">
+        <option [ngValue]="null" disabled>Seleccione tipo</option>
+        @for(tipo of tipoProductos; track tipo.id){
+          <option [ngValue]="tipo.id">
+            {{ tipo.tipo }}
+          </option>
+        }
+      </select>
+      <button (click)="agregar()">Guardar Producto</button>
+      <button (click)="mostrarModal = true">Agregar Proveedor</button>
+    </div>
+    @if(productoProveedorAgregando){
+    <app-modal
+      [(visible)]="mostrarModal"
+      title="Agregar producto proveedor"
+      (confirmAction)="guardarProductoProveedor()"
+    >
+      <div>
+        <label>Proveedor</label>
+        <select [(ngModel)]="productoProveedorAgregando.id_proveedor">
+          @for(proveedor of proveedores; track proveedor.id){
+            <option [ngValue]="proveedor.id">{{ proveedor.nombre }}</option>
+          }
+        </select>
+        <label>Producto</label>
+        <select [(ngModel)]="productoProveedorAgregando.id_producto">
+          <option [ngValue]="null" disabled>Seleccione producto</option>
+          @for(producto of productos; track producto.id){
+            <option [ngValue]="producto.id">{{ producto.nombre }}-{{ producto.clave }}</option>
+          }
+        </select>
+        <label>Clave proveedor</label>
+        <input [(ngModel)]="productoProveedorAgregando.claveInterna" placeholder="Clave">
+        <label>Costo proveedor</label>
+        <input type="number" [(ngModel)]="productoProveedorAgregando.costo" placeholder="Costo">
+      </div>
+    </app-modal>
+    }
+  }
+  <div class="table-container">
+    @if(modoEdicion && productoEditando){
+      <div class="edit-form">
+        <h3>Editar Producto</h3>
+        <input [(ngModel)]="productoEditando.nombre" placeholder="Nombre">
+        <input [(ngModel)]="productoEditando.clave" placeholder="Clave">
+        <input type="number" [(ngModel)]="productoEditando.precio" placeholder="Precio">
+        <button (click)="guardarEdicion();">Guardar</button>
+        <button (click)="modoEdicion=false">Cancelar</button>
+      </div>
+    }
+    <button class="btn-add" (click)="toggleAgregar()">
+      {{ modoAgregar ? 'Volver a búsqueda' : 'Agregar producto' }}
+    </button>
+    <table>
+      <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Clave Producto</th>
+        <th>Precio</th>
+        <th>Acciones</th>
+      </tr>
+      </thead>
+      <tbody>
+        @if(productos.length > 0){
+          @for(producto of productos; track producto.id){
+            <tr>
+              <td>{{ producto.nombre }}</td>
+              <td>{{ producto.clave }}</td>
+              <td>{{ producto.precio}} MXN</td>
+              <td class="actions">
+                <button class="btn-edit" (click)="editar(producto)">Editar
+                </button>
+                <button class="btn-delete" (click)="eliminar(producto.id)">Eliminar</button>
+              </td>
+            </tr>
+
+          }
+
+        } @else {
+          <tr>
+            <td colspan="4" class="no-data">
+              No hay productos
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
